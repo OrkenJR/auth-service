@@ -20,16 +20,23 @@ public class AuthServiceImpl implements AuthService {
 
     //TODO Лень, поэтому буду генерить и давать токен без валидации
     @Override
-    public String login(String username, String password) throws Exception{
+    public String login(String username, String password) throws Exception {
         UserDto userDto = Optional.ofNullable(userFeign.byUsername(username))
                 .filter(response -> response.getStatusCode().is2xxSuccessful())
                 .map(HttpEntity::getBody)
                 .filter(user -> StringUtils.isNotBlank(user.getUsername()) && StringUtils.isNotBlank(user.getPassword()))
                 .orElseThrow();
 
-        if(!userDto.getUsername().equals(username) && !userDto.getPassword().equals(password)){
+        if (!userDto.getUsername().equals(username) && !userDto.getPassword().equals(password)) {
             throw new IllegalAccessException("");
         }
         return tokenProvider.createToken(username);
     }
+
+    @Override
+    public Boolean validateToken(String token) throws Exception {
+        return tokenProvider.validateToken(token);
+    }
+
+
 }
