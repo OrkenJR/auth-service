@@ -1,9 +1,8 @@
 package kz.iitu.authservice.config;
 
-import kz.iitu.authservice.dto.UserDto;
-import kz.iitu.authservice.feign.UserFeign;
+import kz.iitu.authservice.dto.User;
+import kz.iitu.authservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 
@@ -27,14 +25,12 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserFeign userFeign;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        UserDto user = Optional.ofNullable(userFeign.byUsername(username))
-                .filter(response -> response.getStatusCode().is2xxSuccessful())
-                .map(HttpEntity::getBody)
+        User user = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format("User with username %s not found", username)));
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), buildAuthorities(new HashSet<>()));
