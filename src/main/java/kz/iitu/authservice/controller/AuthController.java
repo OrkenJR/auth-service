@@ -1,12 +1,14 @@
 package kz.iitu.authservice.controller;
 
+import kz.iitu.authservice.dto.LoginRequest;
+import kz.iitu.authservice.dto.LoginResponse;
 import kz.iitu.authservice.service.AuthService;
+import kz.iitu.authservice.service.Impl.LoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -14,10 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+    private final LoginService loginService;
 
     @PostMapping("/login")
-    public String login(@RequestParam String username, @RequestParam String password) throws Exception {
-        return authService.login(username, password);
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+        return loginService.login(loginRequest);
     }
 
     @PostMapping("/validateToken")
