@@ -25,24 +25,23 @@ public class LoginService {
     @Value("${keycloak.client-id}")
     private String clientId;
 
-    private final RestTemplate restTemplate;
-
     public ResponseEntity<LoginResponse> login(LoginRequest request) {
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+//
+//        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+//        map.add("username", request.getUsername());
+//        map.add("password", request.getPassword());
+//        map.add("client_id", clientId);
+//        map.add("client_secret", clientSecret);
+//        map.add("grant_type", grantType);
+//
+//        HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(map, headers);
+//        ResponseEntity<LoginResponse> loginResponse = restTemplate.postForEntity(loginUrl, httpEntity, LoginResponse.class);
 
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        map.add("username", request.getUsername());
-        map.add("password", request.getPassword());
-        map.add("client_id", clientId);
-        map.add("client_secret", clientSecret);
-        map.add("grant_type", grantType);
+//        return ResponseEntity.status(200).body(loginResponse.getBody());
 
-        HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(map, headers);
-        ResponseEntity<LoginResponse> loginResponse = restTemplate.postForEntity(loginUrl, httpEntity, LoginResponse.class);
-
-        return ResponseEntity.status(200).body(loginResponse.getBody());
-
+        return null;
     }
 }

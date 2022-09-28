@@ -11,7 +11,7 @@ public class TokenConfig extends SecurityConfigurerAdapter<DefaultSecurityFilter
     private final TokenFilter tokenFilter;
 
     @Override
-    public void configure(HttpSecurity builder) throws Exception {
+    public void configure(HttpSecurity builder) {
         builder.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

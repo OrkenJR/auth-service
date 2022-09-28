@@ -1,15 +1,14 @@
 package kz.iitu.authservice.controller;
 
+import kz.iitu.authservice.auth.CurrentUserHolder;
 import kz.iitu.authservice.dto.LoginRequest;
 import kz.iitu.authservice.dto.LoginResponse;
+import kz.iitu.authservice.dto.Token;
 import kz.iitu.authservice.service.AuthService;
 import kz.iitu.authservice.service.Impl.LoginService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +23,13 @@ public class AuthController {
     }
 
     @PostMapping("/validateToken")
-    public ResponseEntity<Boolean> validateToken(@RequestBody String token) throws Exception {
-        return new ResponseEntity<>(authService.validateToken(token), HttpStatus.OK);
+    public boolean validateToken(@RequestHeader(value = "Authorization", required = false) String header,
+                                     @RequestParam String token) {
+        Token currentToken = CurrentUserHolder.currentToken.get();
+
+        System.out.println(currentToken);
+
+        return "qwerty123".equals(token);
+        //        return authService.validateToken(token);
     }
 }

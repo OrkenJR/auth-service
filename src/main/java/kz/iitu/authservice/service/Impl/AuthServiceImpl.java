@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
+
     private final TokenProvider tokenProvider;
 
     //TODO Лень, поэтому буду генерить и давать токен без валидации
@@ -27,7 +28,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Boolean validateToken(String token) throws Exception {
+    public Boolean validateToken(String token) {
         return tokenProvider.validateToken(token);
     }
 
