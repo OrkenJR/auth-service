@@ -1,4 +1,4 @@
-package kz.iitu.authservice.config.jwt;
+package kz.iitu.authservice.config;
 
 import kz.iitu.authservice.auth.CurrentUserHolder;
 import kz.iitu.authservice.dto.Token;
@@ -20,8 +20,6 @@ import static kz.iitu.authservice.util.StringUtil.isEmpty;
 @Component
 @RequiredArgsConstructor
 public class TokenFilter extends OncePerRequestFilter {
-
-    private final TokenProvider tokenProvider;
 
     private final TokenRepository tokenRepository;
 
