@@ -1,7 +1,10 @@
 package kz.iitu.authservice.service;
 
-public interface AuthService {
-    String login(String username, String password) throws Exception;
 
-    Boolean validateToken(String token);
+import kz.iitu.cfaslib.dto.LoginRequest;
+
+public interface AuthService {
+    String login(LoginRequest request) throws Exception;
+
+    boolean validateToken(String token);
 }

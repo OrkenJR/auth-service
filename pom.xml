@@ -80,6 +80,12 @@
             <scope>runtime</scope>
         </dependency>
 
+        <dependency>
+            <groupId>kz.iitu</groupId>
+            <artifactId>cfas-lib</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
     <dependencyManagement>
         <dependencies>

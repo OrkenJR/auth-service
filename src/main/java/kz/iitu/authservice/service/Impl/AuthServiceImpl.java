@@ -1,33 +1,53 @@
 package kz.iitu.authservice.service.Impl;
 
-import kz.iitu.authservice.dto.User;
-import kz.iitu.authservice.repository.UserRepository;
+import kz.iitu.authservice.dto.Token;
+import kz.iitu.authservice.repository.TokenRepository;
 import kz.iitu.authservice.service.AuthService;
+import kz.iitu.authservice.utils.TokenProvider;
+import kz.iitu.cfaslib.dto.LoginRequest;
+import kz.iitu.cfaslib.dto.UserDto;
+import kz.iitu.cfaslib.feign.UserFeign;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final UserRepository userRepository;
+    private final UserFeign userFeign;
+    private final TokenRepository tokenRepository;
+    private final TokenProvider tokenProvider;
 
-    //TODO Лень, поэтому буду генерить и давать токен без валидации
     @Override
-    public String login(String username, String password) throws Exception {
-        User user = userRepository.findUserByUsernameAndPassword(username, password)
-                .orElseThrow(() -> new UsernameNotFoundException(String.format("User with username %s not found", username)));
-        if (!user.getUsername().equals(username) && !user.getPassword().equals(password)) {
+    public String login(LoginRequest loginRequest) throws Exception {
+        UserDto user = Optional.ofNullable(userFeign.byUsername(loginRequest.getUsername()))
+                .map(HttpEntity::getBody)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format("User with username %s not found", loginRequest.getUsername())));
+        if (!user.getUsername().equals(loginRequest.getUsername()) && !user.getPassword().equals(loginRequest.getPassword())) {
             throw new IllegalAccessException("");
         }
-        return "qwerty";
+
+        return tokenRepository.save(Token.builder()
+                .id(tokenProvider.createToken(user.getUsername()))
+                .dateTime(LocalDateTime.now())
+                .userId(user.getId())
+                .build()).id;
     }
 
     @Override
-    public Boolean validateToken(String token) {
-        return "qwerty".equals(token);
+    public boolean validateToken(String token) {
+        Token t = tokenRepository.findTokenById(token);
+        boolean res = t != null && t.dateTime != null && t.dateTime.isBefore(LocalDateTime.now());
+        if (res) {
+            t.setDateTime(LocalDateTime.now());
+            tokenRepository.saveAndFlush(t);
+        }
+        return res;
     }
-
 
 }

@@ -5,7 +5,7 @@ import kz.iitu.authservice.dto.Token;
 import kz.iitu.authservice.exception.AuthException;
 import kz.iitu.authservice.repository.TokenRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -15,9 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-import static kz.iitu.authservice.util.StringUtil.isEmpty;
-
-@Component
+//@Component
 @RequiredArgsConstructor
 public class TokenFilter extends OncePerRequestFilter {
 
@@ -34,7 +32,7 @@ public class TokenFilter extends OncePerRequestFilter {
 
         if (!allowed.contains(request.getRequestURI().substring(request.getContextPath().length()))) {
 
-            if (isEmpty(token)) {
+            if (StringUtils.isBlank(token)) {
                 throw new AuthException("ssKvz4iYss :: Please authorise into system to continue");
             }
             Token tokenDto = tokenRepository.findTokenById(token);
