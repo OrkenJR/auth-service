@@ -9,7 +9,7 @@ public class WebSecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/login");
+        return web -> web.ignoring().antMatchers("/login");
     }
 
 }

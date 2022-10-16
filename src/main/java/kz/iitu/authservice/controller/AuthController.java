@@ -6,6 +6,7 @@ import kz.iitu.cfaslib.dto.LoginRequest;
 import kz.iitu.cfaslib.dto.SecuredLoginRequest;
 import kz.iitu.cfaslib.dto.UserDto;
 import kz.iitu.cfaslib.feign.UserFeign;
+import kz.iitu.cfaslib.util.CurrentUserHolder;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,11 @@ public class AuthController extends AbstractWrapper {
         return responseWrap(authService.login(loginRequest));
     }
 
+    @PostMapping("/login/test")
+    public ResponseEntity<String> unsafeLogin(@RequestBody LoginRequest loginRequest) throws Exception {
+        return responseWrap(authService.login(loginRequest));
+    }
+
     @PostMapping("/validateToken")
     public boolean validateToken(@RequestParam String token) {
         if (StringUtils.isBlank(token)) return false;
@@ -43,6 +49,7 @@ public class AuthController extends AbstractWrapper {
 
     @PostMapping("/test")
     public UserDto test() {
+        String username = CurrentUserHolder.currentUser.get();
         return userFeign.byUsername("ceo").getBody();
     }
 }

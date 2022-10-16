@@ -35,17 +35,20 @@ public class AuthServiceImpl implements AuthService {
         return tokenRepository.save(Token.builder()
                 .id(tokenProvider.createToken(user.getUsername()))
                 .dateTime(LocalDateTime.now())
-                .userId(user.getId())
+                .userId(user.getUsername())
                 .build()).id;
     }
 
     @Override
     public boolean validateToken(String token) {
         Token t = tokenRepository.findTokenById(token);
-        boolean res = t != null && t.dateTime != null && t.dateTime.isBefore(LocalDateTime.now());
+        boolean res = t != null && t.dateTime != null && !t.dateTime.isBefore(LocalDateTime.now().minusMinutes(30L));
         if (res) {
             t.setDateTime(LocalDateTime.now());
             tokenRepository.saveAndFlush(t);
+        }
+        else{
+            tokenRepository.deleteTokenById(token);
         }
         return res;
     }
