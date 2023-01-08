@@ -2,9 +2,9 @@ package kz.iitu.authservice.controller;
 
 import kz.iitu.authservice.service.AuthService;
 import kz.iitu.cfaslib.controller.AbstractWrapper;
-import kz.iitu.cfaslib.dto.LoginRequest;
-import kz.iitu.cfaslib.dto.SecuredLoginRequest;
-import kz.iitu.cfaslib.dto.UserDto;
+import kz.iitu.cfaslib.dto.auth.request.LoginRequest;
+import kz.iitu.cfaslib.dto.auth.request.SecuredLoginRequest;
+import kz.iitu.cfaslib.dto.user.UserDto;
 import kz.iitu.cfaslib.feign.UserFeign;
 import kz.iitu.cfaslib.util.CurrentUserHolder;
 import lombok.RequiredArgsConstructor;

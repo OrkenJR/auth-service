@@ -4,8 +4,8 @@ import kz.iitu.authservice.dto.Token;
 import kz.iitu.authservice.repository.TokenRepository;
 import kz.iitu.authservice.service.AuthService;
 import kz.iitu.authservice.utils.TokenProvider;
-import kz.iitu.cfaslib.dto.LoginRequest;
-import kz.iitu.cfaslib.dto.UserDto;
+import kz.iitu.cfaslib.dto.auth.request.LoginRequest;
+import kz.iitu.cfaslib.dto.user.UserDto;
 import kz.iitu.cfaslib.feign.UserFeign;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
@@ -46,8 +46,7 @@ public class AuthServiceImpl implements AuthService {
         if (res) {
             t.setDateTime(LocalDateTime.now());
             tokenRepository.saveAndFlush(t);
-        }
-        else{
+        } else {
             tokenRepository.deleteTokenById(token);
         }
         return res;
